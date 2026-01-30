@@ -1,0 +1,989 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - Chaos of Evoourth's</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        .auth-container {
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: linear-gradient(135deg, #0a0e27 0%, rgba(124, 58, 237, 0.1) 100%);
+            padding: 20px;
+        }
+
+        .auth-form {
+            background-color: var(--secondary-dark);
+            border: 2px solid var(--accent-silver);
+            border-radius: 10px;
+            padding: 40px;
+            width: 100%;
+            max-width: 400px;
+            box-shadow: 0 0 30px rgba(192, 192, 192, 0.1);
+        }
+
+        .auth-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .auth-logo {
+            height: 100px;
+            width: auto;
+            margin-bottom: 20px;
+            filter: drop-shadow(0 0 10px rgba(192, 192, 192, 0.3));
+        }
+
+        .auth-header h1 {
+            color: var(--accent-silver);
+            font-size: 32px;
+            margin-bottom: 10px;
+            text-shadow: 0 0 10px rgba(192, 192, 192, 0.3);
+        }
+
+        .auth-header p {
+            color: var(--text-muted);
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            color: var(--accent-silver);
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .password-input-wrapper {
+            position: relative;
+            display: flex;
+            align-items: center;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 12px;
+            background-color: var(--primary-dark);
+            border: 1px solid var(--accent-gray);
+            border-radius: 5px;
+            color: var(--text-light);
+            font-size: 14px;
+            transition: all 0.3s ease;
+        }
+
+        .form-group input:focus {
+            outline: none;
+            border-color: var(--accent-silver);
+            box-shadow: 0 0 10px rgba(192, 192, 192, 0.2);
+        }
+
+        .form-group input::placeholder {
+            color: var(--text-muted);
+        }
+
+        .toggle-password {
+            position: absolute;
+            right: 12px;
+            cursor: pointer;
+            color: var(--text-muted);
+            transition: all 0.3s ease;
+            background: none;
+            border: none;
+            padding: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .toggle-password:hover {
+            color: var(--accent-silver);
+        }
+
+        .btn-submit {
+            width: 100%;
+            padding: 12px;
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-bottom: 15px;
+        }
+
+        .btn-submit:hover {
+            background-color: #6d28d9;
+            box-shadow: 0 0 15px rgba(124, 58, 237, 0.5);
+            transform: translateY(-2px);
+        }
+
+        .form-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .forgot-password {
+            color: var(--text-muted);
+            text-decoration: none;
+            font-size: 13px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .forgot-password:hover {
+            color: var(--accent-silver);
+        }
+
+        .toggle-form {
+            text-align: center;
+            color: var(--text-muted);
+        }
+
+        .toggle-form a {
+            color: var(--accent-silver);
+            text-decoration: none;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        .toggle-form a:hover {
+            color: var(--primary-color);
+        }
+
+        .form-section {
+            display: none;
+        }
+
+        .form-section.active {
+            display: block;
+        }
+
+        .error-message {
+            background-color: rgba(239, 68, 68, 0.1);
+            border: 1px solid #ef4444;
+            color: #fca5a5;
+            padding: 10px;
+            border-radius: 5px;
+            margin-bottom: 15px;
+            display: none;
+        }
+
+        .error-message.show {
+            display: block;
+        }
+
+        .success-message {
+            background-color: rgba(16, 185, 129, 0.1);
+            border: 1px solid #10b981;
+            color: #86efac;
+            padding: 10px;
+            border-radius: 5px;
+            margin-bottom: 15px;
+            display: none;
+        }
+
+        .success-message.show {
+            display: block;
+        }
+
+        .logo-text {
+            font-size: 20px;
+            font-weight: bold;
+            color: var(--accent-silver);
+            text-shadow: 0 0 10px rgba(192, 192, 192, 0.5);
+        }
+
+        .logo-container {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .back-button {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: var(--accent-silver);
+            cursor: pointer;
+            margin-bottom: 20px;
+            font-size: 14px;
+            transition: all 0.3s ease;
+        }
+
+        .back-button:hover {
+            color: var(--primary-color);
+        }
+
+        .back-button i {
+            font-size: 16px;
+        }
+
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(0, 0, 0, 0.7);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal-overlay.show {
+            display: flex;
+        }
+
+        .modal-content {
+            background-color: var(--secondary-dark);
+            border: 2px solid var(--accent-silver);
+            border-radius: 10px;
+            padding: 40px;
+            width: 100%;
+            max-width: 400px;
+            box-shadow: 0 0 50px rgba(192, 192, 192, 0.2);
+            animation: slideIn 0.3s ease;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(-50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .modal-header {
+            text-align: center;
+            margin-bottom: 25px;
+        }
+
+        .modal-header h2 {
+            color: var(--accent-silver);
+            font-size: 24px;
+            margin-bottom: 10px;
+        }
+
+        .modal-header p {
+            color: var(--text-muted);
+            font-size: 14px;
+        }
+
+        .modal-close {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            color: var(--text-muted);
+            cursor: pointer;
+            font-size: 24px;
+            transition: all 0.3s ease;
+            border: none;
+            background: none;
+            padding: 0;
+        }
+
+        .modal-close:hover {
+            color: var(--accent-silver);
+        }
+
+        .info-text {
+            color: var(--text-muted);
+            font-size: 13px;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .modal-content {
+            position: relative;
+        }
+
+        .reset-step {
+            display: none;
+        }
+
+        .reset-step.active {
+            display: block;
+        }
+
+        .step-indicator {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            margin-bottom: 20px;
+        }
+
+        .step {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background-color: var(--accent-gray);
+            transition: all 0.3s ease;
+        }
+
+        .step.active {
+            background-color: var(--primary-color);
+            width: 24px;
+            border-radius: 4px;
+        }
+
+        .btn-secondary {
+            width: 100%;
+            padding: 12px;
+            background-color: transparent;
+            color: var(--accent-silver);
+            border: 1px solid var(--accent-silver);
+            border-radius: 5px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-bottom: 10px;
+        }
+
+        .btn-secondary:hover {
+            background-color: rgba(192, 192, 192, 0.1);
+            box-shadow: 0 0 10px rgba(192, 192, 192, 0.2);
+        }
+
+        .password-strength {
+            margin-top: 8px;
+            padding: 8px;
+            border-radius: 4px;
+            font-size: 12px;
+            display: none;
+        }
+
+        .password-strength.show {
+            display: block;
+        }
+
+        .password-strength.weak {
+            background-color: rgba(239, 68, 68, 0.1);
+            color: #fca5a5;
+            border: 1px solid rgba(239, 68, 68, 0.3);
+        }
+
+        .password-strength.medium {
+            background-color: rgba(245, 158, 11, 0.1);
+            color: #fcd34d;
+            border: 1px solid rgba(245, 158, 11, 0.3);
+        }
+
+        .password-strength.strong {
+            background-color: rgba(16, 185, 129, 0.1);
+            color: #86efac;
+            border: 1px solid rgba(16, 185, 129, 0.3);
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <nav class="navbar">
+            <div class="logo-container">
+                <img src="server.png" alt="Server Logo" class="logo-img" style="height: 40px; width: auto;">
+                <span class="logo-text">Chaos of Evoourth's</span>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Auth Container -->
+    <div class="auth-container">
+        <div class="auth-form">
+            <!-- Login Form -->
+            <div class="form-section active" id="loginForm">
+                <div class="auth-header">
+                    <h1>Login</h1>
+                    <p>Masuk ke akun Anda</p>
+                </div>
+
+                <div class="error-message" id="loginError"></div>
+                <div class="success-message" id="loginSuccess"></div>
+
+                <form id="loginFormElement" onsubmit="handleLogin(event)">
+                    <div class="form-group">
+                        <label>Email</label>
+                        <input type="email" id="loginEmail" placeholder="Masukkan email Anda" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Password</label>
+                        <div class="password-input-wrapper">
+                            <input type="password" id="loginPassword" placeholder="Masukkan password Anda" required>
+                            <button type="button" class="toggle-password" onclick="togglePasswordVisibility('loginPassword')">
+                                <i class="fas fa-eye"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="form-footer">
+                        <button type="submit" class="btn-submit" style="margin-bottom: 0; flex: 1;">Login</button>
+                    </div>
+
+                    <div style="text-align: right; margin-bottom: 15px;">
+                        <a class="forgot-password" onclick="openForgotPasswordModal()">Lupa password?</a>
+                    </div>
+                </form>
+
+                <div class="toggle-form">
+                    Belum punya akun? <a onclick="toggleForm()">Daftar di sini</a>
+                </div>
+            </div>
+
+            <!-- Register Form -->
+            <div class="form-section" id="registerForm">
+                <div class="auth-header">
+                    <h1>Register</h1>
+                    <p>Buat akun baru</p>
+                </div>
+
+                <div class="error-message" id="registerError"></div>
+                <div class="success-message" id="registerSuccess"></div>
+
+                <form id="registerFormElement" onsubmit="handleRegister(event)">
+                    <div class="form-group">
+                        <label>Username</label>
+                        <input type="text" id="registerUsername" placeholder="Pilih username Anda" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Email</label>
+                        <input type="email" id="registerEmail" placeholder="Masukkan email Anda" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Password</label>
+                        <div class="password-input-wrapper">
+                            <input type="password" id="registerPassword" placeholder="Buat password kuat" required onkeyup="checkPasswordStrength()">
+                            <button type="button" class="toggle-password" onclick="togglePasswordVisibility('registerPassword')">
+                                <i class="fas fa-eye"></i>
+                            </button>
+                        </div>
+                        <div class="password-strength" id="passwordStrength"></div>
+                    </div>
+                    <div class="form-group">
+                        <label>Konfirmasi Password</label>
+                        <div class="password-input-wrapper">
+                            <input type="password" id="registerConfirmPassword" placeholder="Konfirmasi password Anda" required>
+                            <button type="button" class="toggle-password" onclick="togglePasswordVisibility('registerConfirmPassword')">
+                                <i class="fas fa-eye"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <button type="submit" class="btn-submit">Register</button>
+                </form>
+
+                <div class="toggle-form">
+                    Sudah punya akun? <a onclick="toggleForm()">Login di sini</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Forgot Password Modal -->
+    <div class="modal-overlay" id="forgotPasswordModal">
+        <div class="modal-content">
+            <button class="modal-close" onclick="closeForgotPasswordModal()">
+                <i class="fas fa-times"></i>
+            </button>
+
+            <div class="step-indicator">
+                <div class="step active" id="step1Indicator"></div>
+                <div class="step" id="step2Indicator"></div>
+                <div class="step" id="step3Indicator"></div>
+            </div>
+
+            <!-- Step 1: Email Verification -->
+            <div class="reset-step active" id="resetStep1">
+                <div class="modal-header">
+                    <h2>Reset Password</h2>
+                    <p>Masukkan email akun Anda</p>
+                </div>
+
+                <div class="error-message" id="resetError1"></div>
+                <div class="success-message" id="resetSuccess1"></div>
+
+                <form onsubmit="handleResetStep1(event)">
+                    <div class="form-group">
+                        <label>Email</label>
+                        <input type="email" id="resetEmail" placeholder="Masukkan email Anda" required>
+                    </div>
+                    <button type="submit" class="btn-submit">Lanjutkan</button>
+                    <button type="button" class="btn-secondary" onclick="closeForgotPasswordModal()">Batal</button>
+                </form>
+            </div>
+
+            <!-- Step 2: Verification Code -->
+            <div class="reset-step" id="resetStep2">
+                <div class="modal-header">
+                    <h2>Verifikasi Email</h2>
+                    <p>Masukkan kode verifikasi yang dikirim</p>
+                </div>
+
+                <div class="error-message" id="resetError2"></div>
+                <div class="success-message" id="resetSuccess2"></div>
+
+                <div class="info-text">
+                    Kami telah mengirimkan kode verifikasi ke <strong id="resetEmailDisplay"></strong>
+                </div>
+
+                <form onsubmit="handleResetStep2(event)">
+                    <div class="form-group">
+                        <label>Kode Verifikasi</label>
+                        <input type="text" id="verificationCode" placeholder="Masukkan 6 digit kode" maxlength="6" required>
+                    </div>
+                    <button type="submit" class="btn-submit">Verifikasi</button>
+                    <button type="button" class="btn-secondary" onclick="goBackToStep1()">Kembali</button>
+                </form>
+
+                <div style="text-align: center; margin-top: 15px;">
+                    <span class="forgot-password" style="font-size: 12px;">Tidak menerima kode? <a class="forgot-password" onclick="resendVerificationCode()" style="color: var(--primary-color);">Kirim ulang</a></span>
+                </div>
+            </div>
+
+            <!-- Step 3: New Password -->
+            <div class="reset-step" id="resetStep3">
+                <div class="modal-header">
+                    <h2>Password Baru</h2>
+                    <p>Buat password baru yang kuat</p>
+                </div>
+
+                <div class="error-message" id="resetError3"></div>
+                <div class="success-message" id="resetSuccess3"></div>
+
+                <form onsubmit="handleResetStep3(event)">
+                    <div class="form-group">
+                        <label>Password Baru</label>
+                        <div class="password-input-wrapper">
+                            <input type="password" id="newPassword" placeholder="Buat password kuat" required onkeyup="checkNewPasswordStrength()">
+                            <button type="button" class="toggle-password" onclick="togglePasswordVisibility('newPassword')">
+                                <i class="fas fa-eye"></i>
+                            </button>
+                        </div>
+                        <div class="password-strength" id="newPasswordStrength"></div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Konfirmasi Password</label>
+                        <div class="password-input-wrapper">
+                            <input type="password" id="confirmNewPassword" placeholder="Konfirmasi password baru" required>
+                            <button type="button" class="toggle-password" onclick="togglePasswordVisibility('confirmNewPassword')">
+                                <i class="fas fa-eye"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <button type="submit" class="btn-submit">Update Password</button>
+                    <button type="button" class="btn-secondary" onclick="closeForgotPasswordModal()">Batal</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // ==================== PASSWORD VISIBILITY ====================
+        function togglePasswordVisibility(inputId) {
+            const input = document.getElementById(inputId);
+            const isPassword = input.type === 'password';
+            input.type = isPassword ? 'text' : 'password';
+            
+            // Update icon
+            const button = event.target.closest('.toggle-password');
+            button.innerHTML = isPassword ? '<i class="fas fa-eye-slash"></i>' : '<i class="fas fa-eye"></i>';
+        }
+
+        // ==================== PASSWORD STRENGTH CHECKER ====================
+        function checkPasswordStrength() {
+            const password = document.getElementById('registerPassword').value;
+            const strengthDiv = document.getElementById('passwordStrength');
+            
+            if (password.length === 0) {
+                strengthDiv.classList.remove('show');
+                return;
+            }
+
+            strengthDiv.classList.add('show');
+            
+            let strength = 0;
+            if (password.length >= 8) strength++;
+            if (password.length >= 12) strength++;
+            if (/[A-Z]/.test(password)) strength++;
+            if (/[0-9]/.test(password)) strength++;
+            if (/[!@#$%^&*]/.test(password)) strength++;
+
+            if (strength <= 1) {
+                strengthDiv.className = 'password-strength show weak';
+                strengthDiv.textContent = '❌ Password lemah - Minimal 8 karakter dengan huruf besar, angka, dan simbol';
+            } else if (strength <= 3) {
+                strengthDiv.className = 'password-strength show medium';
+                strengthDiv.textContent = '⚠️ Password sedang - Tambahkan karakter khusus untuk lebih kuat';
+            } else {
+                strengthDiv.className = 'password-strength show strong';
+                strengthDiv.textContent = '✅ Password kuat - Siap digunakan';
+            }
+        }
+
+        function checkNewPasswordStrength() {
+            const password = document.getElementById('newPassword').value;
+            const strengthDiv = document.getElementById('newPasswordStrength');
+            
+            if (password.length === 0) {
+                strengthDiv.classList.remove('show');
+                return;
+            }
+
+            strengthDiv.classList.add('show');
+            
+            let strength = 0;
+            if (password.length >= 8) strength++;
+            if (password.length >= 12) strength++;
+            if (/[A-Z]/.test(password)) strength++;
+            if (/[0-9]/.test(password)) strength++;
+            if (/[!@#$%^&*]/.test(password)) strength++;
+
+            if (strength <= 1) {
+                strengthDiv.className = 'password-strength show weak';
+                strengthDiv.textContent = '❌ Password lemah - Minimal 8 karakter dengan huruf besar, angka, dan simbol';
+            } else if (strength <= 3) {
+                strengthDiv.className = 'password-strength show medium';
+                strengthDiv.textContent = '⚠️ Password sedang - Tambahkan karakter khusus untuk lebih kuat';
+            } else {
+                strengthDiv.className = 'password-strength show strong';
+                strengthDiv.textContent = '✅ Password kuat - Siap digunakan';
+            }
+        }
+
+        // ==================== FORM TOGGLE ====================
+        function toggleForm() {
+            document.getElementById('loginForm').classList.toggle('active');
+            document.getElementById('registerForm').classList.toggle('active');
+            document.getElementById('loginError').classList.remove('show');
+            document.getElementById('registerError').classList.remove('show');
+        }
+
+        // ==================== LOGIN ====================
+        function handleLogin(e) {
+            e.preventDefault();
+            const email = document.getElementById('loginEmail').value;
+            const password = document.getElementById('loginPassword').value;
+
+            const users = JSON.parse(localStorage.getItem('users')) || [];
+            const user = users.find(u => u.email === email && u.password === password);
+
+            if (user) {
+                localStorage.setItem('currentUser', JSON.stringify(user));
+                window.location.href = 'index.html';
+            } else {
+                showError('loginError', 'Email atau password salah!');
+            }
+        }
+
+        // ==================== REGISTER ====================
+        function handleRegister(e) {
+            e.preventDefault();
+            const username = document.getElementById('registerUsername').value;
+            const email = document.getElementById('registerEmail').value;
+            const password = document.getElementById('registerPassword').value;
+            const confirmPassword = document.getElementById('registerConfirmPassword').value;
+
+            if (password !== confirmPassword) {
+                showError('registerError', 'Password tidak cocok!');
+                return;
+            }
+
+            const users = JSON.parse(localStorage.getItem('users')) || [];
+            if (users.find(u => u.email === email)) {
+                showError('registerError', 'Email sudah terdaftar!');
+                return;
+            }
+
+            const newUser = {
+                id: Date.now(),
+                username: username,
+                email: email,
+                password: password,
+                avatar: 'data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><rect fill="%23c0c0c0" width="100" height="100"/><text x="50" y="60" font-size="50" text-anchor="middle" fill="%230a0e27">👤</text></svg>',
+                createdAt: new Date().toISOString()
+            };
+
+            users.push(newUser);
+            localStorage.setItem('users', JSON.stringify(users));
+
+            showSuccess('registerSuccess', 'Akun berhasil dibuat! Silakan login.');
+            setTimeout(() => {
+                toggleForm();
+                document.getElementById('registerUsername').value = '';
+                document.getElementById('registerEmail').value = '';
+                document.getElementById('registerPassword').value = '';
+                document.getElementById('registerConfirmPassword').value = '';
+            }, 1500);
+        }
+
+        // ==================== FORGOT PASSWORD ====================
+        let resetState = {
+            email: '',
+            verificationCode: '',
+            generatedCode: ''
+        };
+
+        function openForgotPasswordModal() {
+            document.getElementById('forgotPasswordModal').classList.add('show');
+        }
+
+        function closeForgotPasswordModal() {
+            document.getElementById('forgotPasswordModal').classList.remove('show');
+            resetForm();
+        }
+
+        function resetForm() {
+            // Clear all inputs
+            document.getElementById('resetEmail').value = '';
+            document.getElementById('verificationCode').value = '';
+            document.getElementById('newPassword').value = '';
+            document.getElementById('confirmNewPassword').value = '';
+            
+            // Reset to step 1
+            showResetStep(1);
+            
+            // Clear messages
+            document.getElementById('resetError1').classList.remove('show');
+            document.getElementById('resetError2').classList.remove('show');
+            document.getElementById('resetError3').classList.remove('show');
+            document.getElementById('resetSuccess1').classList.remove('show');
+            document.getElementById('resetSuccess2').classList.remove('show');
+            document.getElementById('resetSuccess3').classList.remove('show');
+            
+            // Clear state
+            resetState = {
+                email: '',
+                verificationCode: '',
+                generatedCode: ''
+            };
+        }
+
+        function showResetStep(step) {
+            // Hide all steps
+            document.getElementById('resetStep1').classList.remove('active');
+            document.getElementById('resetStep2').classList.remove('active');
+            document.getElementById('resetStep3').classList.remove('active');
+            
+            // Reset indicators
+            document.getElementById('step1Indicator').classList.remove('active');
+            document.getElementById('step2Indicator').classList.remove('active');
+            document.getElementById('step3Indicator').classList.remove('active');
+            
+            // Show active step
+            document.getElementById(`resetStep${step}`).classList.add('active');
+            document.getElementById(`step${step}Indicator`).classList.add('active');
+        }
+
+        // ==================== EMAIL CONFIGURATION ====================
+        // Konfigurasi untuk email sender
+        const emailConfig = {
+            serviceEmail: 'support@chaoosevoourth.com', // Ganti dengan email pengirim Anda
+            appPassword: 'your-app-password-here', // Ganti dengan App Password jika menggunakan Gmail
+            serviceName: 'Chaos of Evoourth\'s'
+        };
+
+        function handleResetStep1(e) {
+            e.preventDefault();
+            const email = document.getElementById('resetEmail').value;
+            const users = JSON.parse(localStorage.getItem('users')) || [];
+            
+            const user = users.find(u => u.email === email);
+            if (!user) {
+                showError('resetError1', 'Email tidak ditemukan!');
+                return;
+            }
+
+            resetState.email = email;
+            resetState.generatedCode = generateVerificationCode(); // Generate 6-digit code
+            
+            // Kirim email dengan kode verifikasi
+            sendVerificationEmail(email, resetState.generatedCode);
+            
+            // Tampilkan info ke console untuk debugging
+            console.log('Verification code generated:', resetState.generatedCode);
+            console.log('Sending to:', email);
+            
+            document.getElementById('resetEmailDisplay').textContent = email;
+            showResetStep(2);
+            showSuccess('resetSuccess2', 'Kode verifikasi telah dikirim ke email Anda');
+        }
+
+        // Generate random 6-digit code
+        function generateVerificationCode() {
+            return Math.floor(100000 + Math.random() * 900000).toString();
+        }
+
+        // ==================== EMAIL SENDER FUNCTION ====================
+        async function sendVerificationEmail(recipientEmail, verificationCode) {
+            try {
+                // OPSI 1: Menggunakan EmailJS (Client-side, tanpa backend)
+                // Daftar di https://www.emailjs.com/ dan dapatkan PUBLIC_KEY
+                if (typeof emailjs !== 'undefined') {
+                    await emailjs.send('SERVICE_ID', 'TEMPLATE_ID', {
+                        to_email: recipientEmail,
+                        verification_code: verificationCode,
+                        from_name: emailConfig.serviceName
+                    });
+                    console.log('Email sent via EmailJS');
+                    return;
+                }
+
+                // OPSI 2: Menggunakan Fetch API ke backend Anda
+                const response = await fetch('/api/send-verification-email', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        recipientEmail: recipientEmail,
+                        verificationCode: verificationCode,
+                        senderEmail: emailConfig.serviceEmail,
+                        serviceName: emailConfig.serviceName
+                    })
+                });
+                
+                if (response.ok) {
+                    console.log('Email sent successfully via backend');
+                } else {
+                    console.error('Failed to send email via backend');
+                }
+
+                // OPSI 3: Menggunakan Firebase Cloud Functions
+                // Hubungi Cloud Function untuk mengirim email
+                
+            } catch (error) {
+                console.error('Error sending verification email:', error);
+                // Email tetap dilanjutkan meski ada error di service pengiriman
+                // User masih bisa menerima kode dari console log untuk testing
+            }
+        }
+
+        // ==================== INTEGRASI EMAIL SERVICES ====================
+        // Contoh implementasi dengan berbagai service:
+
+        // Untuk Gmail (gunakan App Password):
+        // 1. Enable 2-Factor Authentication di Gmail
+        // 2. Generate App Password di https://myaccount.google.com/apppasswords
+        // 3. Gunakan App Password di emailConfig.appPassword
+
+        // Untuk Nodemailer Backend (Node.js):
+        /*
+        const nodemailer = require('nodemailer');
+        
+        const transporter = nodemailer.createTransport({
+            service: 'gmail',
+            auth: {
+                user: 'your-email@gmail.com',
+                pass: 'your-app-password'
+            }
+        });
+        
+        const mailOptions = {
+            from: 'your-email@gmail.com',
+            to: recipientEmail,
+            subject: 'Kode Verifikasi Password Reset',
+            html: `
+                <h2>Kode Verifikasi Password Reset</h2>
+                <p>Masukkan kode berikut untuk mereset password Anda:</p>
+                <h1 style="color: #7c3aed;">${verificationCode}</h1>
+                <p>Kode ini berlaku selama 10 menit.</p>
+            `
+        };
+        
+        transporter.sendMail(mailOptions, (error, info) => {
+            if (error) console.log(error);
+            else console.log('Email sent: ' + info.response);
+        });
+        */
+
+        function handleResetStep2(e) {
+            e.preventDefault();
+            const code = document.getElementById('verificationCode').value;
+            
+            if (code !== resetState.generatedCode) {
+                showError('resetError2', 'Kode verifikasi tidak sesuai!');
+                return;
+            }
+
+            showResetStep(3);
+        }
+
+        function handleResetStep3(e) {
+            e.preventDefault();
+            const newPassword = document.getElementById('newPassword').value;
+            const confirmPassword = document.getElementById('confirmNewPassword').value;
+
+            if (newPassword !== confirmPassword) {
+                showError('resetError3', 'Password tidak cocok!');
+                return;
+            }
+
+            if (newPassword.length < 8) {
+                showError('resetError3', 'Password minimal 8 karakter!');
+                return;
+            }
+
+            // Update password in users
+            const users = JSON.parse(localStorage.getItem('users')) || [];
+            const userIndex = users.findIndex(u => u.email === resetState.email);
+            
+            if (userIndex !== -1) {
+                users[userIndex].password = newPassword;
+                localStorage.setItem('users', JSON.stringify(users));
+                
+                showSuccess('resetSuccess3', 'Password berhasil diubah! Silakan login dengan password baru.');
+                setTimeout(() => {
+                    closeForgotPasswordModal();
+                }, 2000);
+            }
+        }
+
+        function goBackToStep1() {
+            showResetStep(1);
+            document.getElementById('resetError2').classList.remove('show');
+            document.getElementById('resetSuccess2').classList.remove('show');
+            document.getElementById('verificationCode').value = '';
+        }
+
+        function resendVerificationCode() {
+            resetState.generatedCode = generateVerificationCode();
+            sendVerificationEmail(resetState.email, resetState.generatedCode);
+            console.log('New verification code:', resetState.generatedCode);
+            showSuccess('resetSuccess2', 'Kode verifikasi baru telah dikirim!');
+        }
+
+        // ==================== MESSAGE DISPLAY ====================
+        function showError(elementId, message) {
+            const element = document.getElementById(elementId);
+            element.textContent = message;
+            element.classList.add('show');
+        }
+
+        function showSuccess(elementId, message) {
+            const element = document.getElementById(elementId);
+            element.textContent = message;
+            element.classList.add('show');
+        }
+
+        // Close modal when clicking outside
+        document.addEventListener('click', (e) => {
+            const modal = document.getElementById('forgotPasswordModal');
+            if (e.target === modal) {
+                closeForgotPasswordModal();
+            }
+        });
+    </script>
+</body>
+</html>
