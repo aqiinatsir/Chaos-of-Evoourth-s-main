@@ -5,17 +5,23 @@ const PAYMENT_CONFIG = {
     dana: {
         number: '085880212494',
         name: 'DANA',
-        displayNumber: '0858 8021 2494'
+        displayNumber: '0858 8021 2494',
+        deepLink: 'dana://transfer?phone=085880212494',
+        webLink: 'https://m.dana.id/transfer'
     },
     ovo: {
         number: '085880212494',
         name: 'OVO',
-        displayNumber: '0858 8021 2494'
+        displayNumber: '0858 8021 2494',
+        deepLink: 'ovo://transfer?phone=085880212494',
+        webLink: 'https://www.ovo.id/transfer'
     },
     gopay: {
         number: '085880212494',
         name: 'GoPay',
-        displayNumber: '0858 8021 2494'
+        displayNumber: '0858 8021 2494',
+        deepLink: 'gopay://transfer?phone=085880212494',
+        webLink: 'https://gopay.co.id/transfer'
     },
     qris: {
         number: '085880212494',
@@ -33,7 +39,6 @@ let currentItem = {
 };
 
 let selectedPaymentMethod = '';
-let qrisQRCode = null;
 
 // ============================================
 // PAYMENT FUNCTIONS
@@ -55,7 +60,10 @@ function openPaymentModal(type, name, price) {
     document.querySelectorAll('.payment-details').forEach(details => details.classList.remove('active'));
     
     const confirmBtn = document.getElementById('confirmPaymentBtn');
-    if (confirmBtn) confirmBtn.disabled = true;
+    if (confirmBtn) {
+        confirmBtn.disabled = true;
+        confirmBtn.textContent = '✅ Pilih Metode Pembayaran';
+    }
     
     openModal('paymentModal');
 }
@@ -76,9 +84,16 @@ function selectPayment(method) {
     const detailsEl = document.getElementById(`${method}Details`);
     if (detailsEl) detailsEl.classList.add('active');
     
-    // Enable confirm button
+    // Update confirm button
     const confirmBtn = document.getElementById('confirmPaymentBtn');
-    if (confirmBtn) confirmBtn.disabled = false;
+    if (confirmBtn) {
+        confirmBtn.disabled = false;
+        if (method === 'qris') {
+            confirmBtn.textContent = '✅ Sudah Bayar? Konfirmasi ke Admin';
+        } else {
+            confirmBtn.textContent = `✅ Bayar dengan ${PAYMENT_CONFIG[method].name}`;
+        }
+    }
     
     // Generate QRIS if selected
     if (method === 'qris') {
@@ -121,35 +136,86 @@ function createQRCode(canvas) {
     }
 }
 
-// Copy to Clipboard
-function copyToClipboard(text) {
-    if (navigator.clipboard && navigator.clipboard.writeText) {
-        navigator.clipboard.writeText(text).then(() => {
-            showToast('✅ Nomor berhasil disalin!');
-        }).catch(() => {
-            fallbackCopy(text);
-        });
-    } else {
-        fallbackCopy(text);
-    }
+// Open E-Wallet App
+function openEWalletApp(method) {
+    const config = PAYMENT_CONFIG[method];
+    if (!config) return;
+    
+    // Try to open deep link first
+    const deepLink = config.deepLink;
+    const webLink = config.webLink;
+    
+    // Create a hidden iframe to try deep link
+    const iframe = document.createElement('iframe');
+    iframe.style.display = 'none';
+    document.body.appendChild(iframe);
+    
+    // Try deep link
+    iframe.src = deepLink;
+    
+    // Fallback to web link after short delay if app not installed
+    setTimeout(() => {
+        document.body.removeChild(iframe);
+        
+        // Show dialog to user
+        const confirmed = confirm(
+            `Aplikasi ${config.name} akan dibuka.\n\n` +
+            `Jika aplikasi tidak terbuka otomatis, silakan buka manual dan transfer ke:\n` +
+            `Nomor: ${config.displayNumber}\n` +
+            `Nominal: Rp ${currentItem.price.toLocaleString('id-ID')}\n\n` +
+            `Klik OK untuk mencoba membuka aplikasi.`
+        );
+        
+        if (confirmed) {
+            // Try window location
+            window.location.href = deepLink;
+            
+            // Final fallback
+            setTimeout(() => {
+                window.open(webLink, '_blank');
+            }, 500);
+        }
+    }, 300);
 }
 
-function fallbackCopy(text) {
-    const textArea = document.createElement('textarea');
-    textArea.value = text;
-    textArea.style.position = 'fixed';
-    textArea.style.left = '-9999px';
-    document.body.appendChild(textArea);
-    textArea.select();
+// Confirm Payment
+function confirmPayment() {
+    if (!selectedPaymentMethod) {
+        showToast('❌ Silakan pilih metode pembayaran!');
+        return;
+    }
+
+    const currentUser = JSON.parse(localStorage.getItem('currentUser'));
+    const paymentInfo = PAYMENT_CONFIG[selectedPaymentMethod];
     
-    try {
-        document.execCommand('copy');
-        showToast('✅ Nomor berhasil disalin!');
-    } catch (err) {
-        showToast('❌ Gagal menyalin nomor');
+    // If not QRIS, open the e-wallet app first
+    if (selectedPaymentMethod !== 'qris') {
+        openEWalletApp(selectedPaymentMethod);
     }
     
-    document.body.removeChild(textArea);
+    // Then open WhatsApp for confirmation
+    setTimeout(() => {
+        const itemType = currentItem.type === 'rank' ? 'Rank' : 'Kit';
+        const username = currentUser ? currentUser.username : 'Guest';
+        
+        const message = `Halo Admin Chaos of Evoourth's! 👋
+
+Saya ingin membeli:
+📦 *${itemType}*: ${currentItem.name}
+💰 *Harga*: Rp ${currentItem.price.toLocaleString('id-ID')}
+💳 *Metode Pembayaran*: ${paymentInfo.name}
+👤 *Username Minecraft*: ${username}
+
+Saya akan melakukan pembayaran ke nomor ${paymentInfo.name}: ${paymentInfo.displayNumber}
+
+Mohon konfirmasi setelah pembayaran saya selesai. Terima kasih! 🙏`;
+
+        const whatsappURL = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(message)}`;
+        window.open(whatsappURL, '_blank');
+    }, 800);
+    
+    // Close modal
+    closeModal('paymentModal');
 }
 
 // Show Toast Notification
@@ -165,7 +231,7 @@ function showToast(message) {
             bottom: 30px;
             left: 50%;
             transform: translateX(-50%);
-            background: #28a745;
+            background: #10b981;
             color: white;
             padding: 12px 24px;
             border-radius: 8px;
@@ -183,38 +249,6 @@ function showToast(message) {
     setTimeout(() => {
         toast.style.opacity = '0';
     }, 3000);
-}
-
-// Confirm Payment
-function confirmPayment() {
-    if (!selectedPaymentMethod) {
-        showToast('❌ Silakan pilih metode pembayaran!');
-        return;
-    }
-
-    const currentUser = JSON.parse(localStorage.getItem('currentUser'));
-    const paymentInfo = PAYMENT_CONFIG[selectedPaymentMethod];
-    
-    const itemType = currentItem.type === 'rank' ? 'Rank' : 'Kit';
-    const username = currentUser ? currentUser.username : 'Guest';
-    
-    const message = `Halo Admin Chaos of Evoourth's! 👋
-
-Saya ingin membeli:
-📦 *${itemType}*: ${currentItem.name}
-💰 *Harga*: Rp ${currentItem.price.toLocaleString('id-ID')}
-💳 *Metode Pembayaran*: ${paymentInfo.name}
-👤 *Username Minecraft*: ${username}
-
-Saya sudah melakukan pembayaran ke nomor ${paymentInfo.name}: ${paymentInfo.displayNumber}
-
-Mohon konfirmasi dan proses pembelian saya. Terima kasih! 🙏`;
-
-    const whatsappURL = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(message)}`;
-    window.open(whatsappURL, '_blank');
-    
-    // Close modal
-    closeModal('paymentModal');
 }
 
 // ============================================
