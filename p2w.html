@@ -25,7 +25,210 @@
             align-items: center;
             gap: 10px;
         }
+
+        /* Payment Modal Styles */
+        .payment-modal {
+            max-width: 500px;
+            width: 90%;
+        }
+
+        .payment-options {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            margin: 20px 0;
+        }
+
+        .payment-option {
+            border: 2px solid #ddd;
+            border-radius: 12px;
+            padding: 15px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: center;
+            background: #fff;
+        }
+
+        .payment-option:hover {
+            border-color: #00a8e8;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 168, 232, 0.2);
+        }
+
+        .payment-option.selected {
+            border-color: #00a8e8;
+            background: #e6f7ff;
+            box-shadow: 0 0 0 3px rgba(0, 168, 232, 0.3);
+        }
+
+        .payment-option img {
+            width: 50px;
+            height: 50px;
+            object-fit: contain;
+            margin-bottom: 8px;
+        }
+
+        .payment-option span {
+            display: block;
+            font-weight: 600;
+            color: #333;
+            font-size: 14px;
+        }
+
+        .payment-details {
+            background: #f8f9fa;
+            border-radius: 12px;
+            padding: 20px;
+            margin-top: 20px;
+            text-align: center;
+            display: none;
+        }
+
+        .payment-details.active {
+            display: block;
+            animation: fadeIn 0.3s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .payment-details h4 {
+            color: #333;
+            margin-bottom: 15px;
+            font-size: 16px;
+        }
+
+        .payment-number {
+            background: #fff;
+            border: 2px dashed #00a8e8;
+            border-radius: 8px;
+            padding: 15px;
+            font-size: 24px;
+            font-weight: bold;
+            color: #00a8e8;
+            letter-spacing: 2px;
+            margin-bottom: 15px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .payment-number:hover {
+            background: #e6f7ff;
+        }
+
+        .qris-container {
+            background: #fff;
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 15px;
+        }
+
+        .qris-code {
+            width: 200px;
+            height: 200px;
+            margin: 0 auto;
+            background: #fff;
+            padding: 10px;
+            border-radius: 8px;
+            border: 1px solid #ddd;
+        }
+
+        .copy-btn {
+            background: #00a8e8;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: all 0.3s ease;
+            margin-top: 10px;
+        }
+
+        .copy-btn:hover {
+            background: #0086c9;
+            transform: scale(1.05);
+        }
+
+        .copy-btn.copied {
+            background: #28a745;
+        }
+
+        .item-summary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 15px;
+            border-radius: 12px;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .item-summary h3 {
+            margin: 0 0 5px 0;
+            font-size: 20px;
+        }
+
+        .item-summary .price {
+            font-size: 28px;
+            font-weight: bold;
+            margin: 0;
+        }
+
+        .btn-confirm-payment {
+            width: 100%;
+            padding: 15px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 20px;
+        }
+
+        .btn-confirm-payment:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn-confirm-payment:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+
+        .payment-instruction {
+            font-size: 12px;
+            color: #666;
+            margin-top: 10px;
+            line-height: 1.5;
+        }
+
+        .toast {
+            position: fixed;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #28a745;
+            color: white;
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-size: 14px;
+            z-index: 9999;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .toast.show {
+            opacity: 1;
+        }
     </style>
+<base target="_blank">
 </head>
 <body>
     <!-- Header & Navigation -->
@@ -105,6 +308,79 @@
         </div>
     </div>
 
+    <!-- Payment Modal -->
+    <div class="modal" id="paymentModal">
+        <div class="modal-content payment-modal">
+            <span class="close" id="closePaymentModal">&times;</span>
+            <h2>💳 Pilih Metode Pembayaran</h2>
+            
+            <div class="item-summary">
+                <h3 id="paymentItemName">Item Name</h3>
+                <p class="price" id="paymentItemPrice">Rp 0</p>
+            </div>
+
+            <div class="payment-options">
+                <div class="payment-option" data-method="dana" onclick="selectPayment('dana')">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/7/72/Logo_dana_blue.svg/1200px-Logo_dana_blue.svg.png" alt="DANA">
+                    <span>DANA</span>
+                </div>
+                <div class="payment-option" data-method="ovo" onclick="selectPayment('ovo')">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/e/eb/Logo_ovo_purple.svg/512px-Logo_ovo_purple.svg.png" alt="OVO">
+                    <span>OVO</span>
+                </div>
+                <div class="payment-option" data-method="gopay" onclick="selectPayment('gopay')">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/8/86/Gopay_logo.svg/512px-Gopay_logo.svg.png" alt="GoPay">
+                    <span>GoPay</span>
+                </div>
+                <div class="payment-option" data-method="qris" onclick="selectPayment('qris')">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/a/a2/QRIS_logo.svg/512px-QRIS_logo.svg.png" alt="QRIS">
+                    <span>QRIS (DANA)</span>
+                </div>
+            </div>
+
+            <!-- DANA Payment Details -->
+            <div class="payment-details" id="danaDetails">
+                <h4>📱 Pembayaran via DANA</h4>
+                <p>Silakan transfer ke nomor DANA berikut:</p>
+                <div class="payment-number" onclick="copyToClipboard('085880212494')">0858 8021 2494</div>
+                <button class="copy-btn" onclick="copyToClipboard('085880212494')">📋 Salin Nomor</button>
+                <p class="payment-instruction">Transfer sesuai nominal dan simpan bukti pembayaran</p>
+            </div>
+
+            <!-- OVO Payment Details -->
+            <div class="payment-details" id="ovoDetails">
+                <h4>📱 Pembayaran via OVO</h4>
+                <p>Silakan transfer ke nomor OVO berikut:</p>
+                <div class="payment-number" onclick="copyToClipboard('085880212494')">0858 8021 2494</div>
+                <button class="copy-btn" onclick="copyToClipboard('085880212494')">📋 Salin Nomor</button>
+                <p class="payment-instruction">Transfer sesuai nominal dan simpan bukti pembayaran</p>
+            </div>
+
+            <!-- GoPay Payment Details -->
+            <div class="payment-details" id="gopayDetails">
+                <h4>📱 Pembayaran via GoPay</h4>
+                <p>Silakan transfer ke nomor GoPay berikut:</p>
+                <div class="payment-number" onclick="copyToClipboard('085880212494')">0858 8021 2494</div>
+                <button class="copy-btn" onclick="copyToClipboard('085880212494')">📋 Salin Nomor</button>
+                <p class="payment-instruction">Transfer sesuai nominal dan simpan bukti pembayaran</p>
+            </div>
+
+            <!-- QRIS Payment Details -->
+            <div class="payment-details" id="qrisDetails">
+                <h4>📷 Scan QRIS (DANA)</h4>
+                <p>Scan kode QR berikut menggunakan aplikasi pembayaran:</p>
+                <div class="qris-container">
+                    <div id="qrisCanvas" class="qris-code"></div>
+                </div>
+                <p class="payment-instruction">Pembayaran akan masuk langsung ke DANA</p>
+            </div>
+
+            <button class="btn-confirm-payment" id="confirmPaymentBtn" onclick="confirmPayment()" disabled>
+                ✅ Konfirmasi & Hubungi Admin
+            </button>
+        </div>
+    </div>
+
     <!-- Page Header -->
     <section class="page-header">
         <h1>👑 Shop P2W</h1>
@@ -121,7 +397,7 @@
                     <div class="rank-badge">Rank 1</div>
                     <h3>Master</h3>
                     <div class="price">Rp 40.000</div>
-                    <button class="btn btn-primary buy-btn" onclick="buyRank('Master', 40000)">Beli Sekarang</button>
+                    <button class="btn btn-primary buy-btn" onclick="openPaymentModal('rank', 'Master', 40000)">Beli Sekarang</button>
                 </div>
 
                 <!-- Rank 2 -->
@@ -131,7 +407,7 @@
                     <h3>Villain</h3>
                     <div class="price">Rp 50.000</div>
                    
-                    <button class="btn btn-primary buy-btn" onclick="buyRank('Villain', 50000)">Beli Sekarang</button>
+                    <button class="btn btn-primary buy-btn" onclick="openPaymentModal('rank', 'Villain', 50000)">Beli Sekarang</button>
                 </div>
 
                 <!-- Rank 3 -->
@@ -139,7 +415,7 @@
                     <div class="rank-badge">Rank 3</div>
                     <h3>therat</h3>
                     <div class="price">Rp 70.000</div>
-                    <button class="btn btn-primary buy-btn" onclick="buyRank('therat', 70000)">Beli Sekarang</button>
+                    <button class="btn btn-primary buy-btn" onclick="openPaymentModal('rank', 'therat', 70000)">Beli Sekarang</button>
                 </div>
 
                 <!-- Rank 4 -->
@@ -148,7 +424,7 @@
                     <div class="rank-badge">Rank 4</div>
                     <h3>UNSTOPABBLE</h3>
                     <div class="price">Rp 100.000</div>
-                    <button class="btn btn-primary buy-btn" onclick="buyRank('UNSTOPABBLE', 100000)">Beli Sekarang</button>
+                    <button class="btn btn-primary buy-btn" onclick="openPaymentModal('rank', 'UNSTOPABBLE', 100000)">Beli Sekarang</button>
                 </div>
             </div>
         </div>
@@ -164,7 +440,7 @@
                     <div class="kit-badge">Kit 1</div>
                     <h3>Kit Pvp</h3>
                     <div class="price">Rp 15.000</div>
-                    <button class="btn btn-primary buy-btn" onclick="buyKit('Kit Pvp', 15000)">Beli Sekarang</button>
+                    <button class="btn btn-primary buy-btn" onclick="openPaymentModal('kit', 'Kit Pvp', 15000)">Beli Sekarang</button>
                 </div>
 
                 <!-- Kit 2 -->
@@ -173,7 +449,7 @@
                     <div class="kit-badge">Kit 2</div>
                     <h3>Kit Pro</h3>
                     <div class="price">Rp 25.000</div>
-                    <button class="btn btn-primary buy-btn" onclick="buyKit('Kit Pro', 25000)">Beli Sekarang</button>
+                    <button class="btn btn-primary buy-btn" onclick="openPaymentModal('kit', 'Kit Pro', 25000)">Beli Sekarang</button>
                 </div>
 
                 <!-- Kit 3 -->
@@ -181,46 +457,27 @@
                     <div class="kit-badge">Kit 3</div>
                     <h3>Kit expert</h3>
                     <div class="price">Rp 50.000</div>
-                    <button class="btn btn-primary buy-btn" onclick="buyKit('Kit expert', 50000)">Beli Sekarang</button>
+                    <button class="btn btn-primary buy-btn" onclick="openPaymentModal('kit', 'Kit expert', 50000)">Beli Sekarang</button>
                 </div>
             </div>  
         </div>
     </section>
+
+    <!-- Toast Notification -->
+    <div class="toast" id="toast"></div>
+
     <!-- Footer -->
     <footer>
         <p>&copy; 2025 Chaos of Evoourth's Server. Semua hak dilindungi.</p>
     </footer>
 
+    <!-- QRCode.js Library -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+    <!-- Main Script -->
     <script src="script.js"></script>
+    <!-- Page Specific Script -->
     <script>
-        // ⚙️ KONFIGURASI WHATSAPP
-        const WHATSAPP_NUMBER = '6285880212494';
-
-        document.getElementById('whatsappNumber').textContent = formatPhoneNumber(WHATSAPP_NUMBER);
-
-        function formatPhoneNumber(phone) {
-            const cleaned = phone.replace(/\D/g, '');
-            if (cleaned.startsWith('62')) {
-                const rest = cleaned.substring(2);
-                return '+62 ' + rest.substring(0, 3) + '-' + rest.substring(3, 7) + '-' + rest.substring(7);
-            }
-            return '+' + cleaned;
-        }
-
-        function buyRank(rankName, price) {
-            const currentUser = JSON.parse(localStorage.getItem('currentUser'));
-            const message = `Halo, saya ingin membeli rank *${rankName}* seharga *Rp ${price.toLocaleString('id-ID')}*. Username Minecraft saya: ${currentUser.username}`;
-            const whatsappURL = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(message)}`;
-            window.open(whatsappURL, '_blank');
-        }
-
-        function buyKit(kitName, price) {
-            const currentUser = JSON.parse(localStorage.getItem('currentUser'));
-            const message = `Halo, saya ingin membeli kit *${kitName}* seharga *Rp ${price.toLocaleString('id-ID')}*. Username Minecraft saya: ${currentUser.username}`;
-            const whatsappURL = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(message)}`;
-            window.open(whatsappURL, '_blank');
-        }
-
+        // Profile Functions
         function loadProfile() {
             const currentUser = JSON.parse(localStorage.getItem('currentUser'));
             if (!currentUser) {
@@ -241,24 +498,24 @@
         }
 
         document.getElementById('profileBtn').addEventListener('click', () => {
-            document.getElementById('profileModal').style.display = 'flex';
+            openModal('profileModal');
         });
 
         document.getElementById('closeProfileModal').addEventListener('click', () => {
-            document.getElementById('profileModal').style.display = 'none';
+            closeModal('profileModal');
         });
 
         document.getElementById('editProfileBtn').addEventListener('click', () => {
-            document.getElementById('profileModal').style.display = 'none';
-            document.getElementById('editProfileModal').style.display = 'flex';
+            closeModal('profileModal');
+            openModal('editProfileModal');
         });
 
         document.getElementById('closeEditModal').addEventListener('click', () => {
-            document.getElementById('editProfileModal').style.display = 'none';
+            closeModal('editProfileModal');
         });
 
         document.getElementById('cancelEditBtn').addEventListener('click', () => {
-            document.getElementById('editProfileModal').style.display = 'none';
+            closeModal('editProfileModal');
         });
 
         document.getElementById('avatarInput').addEventListener('change', (e) => {
@@ -300,8 +557,8 @@
             localStorage.setItem('currentUser', JSON.stringify(currentUser));
 
             loadProfile();
-            document.getElementById('editProfileModal').style.display = 'none';
-            alert('Profil berhasil diperbarui!');
+            closeModal('editProfileModal');
+            showToast('✅ Profil berhasil diperbarui!');
         }
 
         document.getElementById('logoutBtn').addEventListener('click', () => {
@@ -311,18 +568,24 @@
             }
         });
 
+        // Close modals when clicking outside
         window.addEventListener('click', (e) => {
             const profileModal = document.getElementById('profileModal');
             const editModal = document.getElementById('editProfileModal');
+            const paymentModal = document.getElementById('paymentModal');
             
             if (e.target === profileModal) {
-                profileModal.style.display = 'none';
+                closeModal('profileModal');
             }
             if (e.target === editModal) {
-                editModal.style.display = 'none';
+                closeModal('editProfileModal');
+            }
+            if (e.target === paymentModal) {
+                closeModal('paymentModal');
             }
         });
 
+        // Initialize
         loadProfile();
     </script>
 </body>
