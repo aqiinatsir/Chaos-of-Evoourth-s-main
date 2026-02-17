@@ -26,10 +26,22 @@
             gap: 10px;
         }
 
-        /* Payment Modal Styles */
+        /* ============================================
+           PAYMENT MODAL STYLES - EMERALD & GOLD THEME
+           ============================================ */
         .payment-modal {
             max-width: 500px;
             width: 90%;
+            background: linear-gradient(145deg, #064e3b 0%, #065f46 100%) !important;
+            border: 2px solid #fbbf24;
+            box-shadow: 0 0 30px rgba(251, 191, 36, 0.3);
+        }
+
+        .payment-modal h2 {
+            color: #fbbf24;
+            text-align: center;
+            margin-bottom: 20px;
+            text-shadow: 0 0 10px rgba(251, 191, 36, 0.5);
         }
 
         .payment-options {
@@ -40,25 +52,25 @@
         }
 
         .payment-option {
-            border: 2px solid #ddd;
+            border: 2px solid #10b981;
             border-radius: 12px;
             padding: 15px;
             cursor: pointer;
             transition: all 0.3s ease;
             text-align: center;
-            background: #fff;
+            background: linear-gradient(145deg, #064e3b 0%, #065f46 100%);
         }
 
         .payment-option:hover {
-            border-color: #00a8e8;
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(0, 168, 232, 0.2);
+            border-color: #fbbf24;
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(251, 191, 36, 0.4);
         }
 
         .payment-option.selected {
-            border-color: #00a8e8;
-            background: #e6f7ff;
-            box-shadow: 0 0 0 3px rgba(0, 168, 232, 0.3);
+            border-color: #fbbf24;
+            background: linear-gradient(145deg, #047857 0%, #059669 100%);
+            box-shadow: 0 0 20px rgba(251, 191, 36, 0.5), inset 0 0 20px rgba(251, 191, 36, 0.1);
         }
 
         .payment-option img {
@@ -66,17 +78,20 @@
             height: 50px;
             object-fit: contain;
             margin-bottom: 8px;
+            filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.3));
         }
 
         .payment-option span {
             display: block;
-            font-weight: 600;
-            color: #333;
+            font-weight: 700;
+            color: #fbbf24;
             font-size: 14px;
+            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
         }
 
         .payment-details {
-            background: #f8f9fa;
+            background: linear-gradient(145deg, #065f46 0%, #047857 100%);
+            border: 2px solid #fbbf24;
             border-radius: 12px;
             padding: 20px;
             margin-top: 20px;
@@ -95,34 +110,36 @@
         }
 
         .payment-details h4 {
-            color: #333;
+            color: #fbbf24;
             margin-bottom: 15px;
             font-size: 16px;
+            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
         }
 
-        .payment-number {
-            background: #fff;
-            border: 2px dashed #00a8e8;
-            border-radius: 8px;
+        .payment-details p {
+            color: #a7f3d0;
+            font-size: 14px;
+        }
+
+        .payment-number-display {
+            background: linear-gradient(145deg, #064e3b 0%, #065f46 100%);
+            border: 2px dashed #fbbf24;
+            border-radius: 12px;
             padding: 15px;
-            font-size: 24px;
+            font-size: 28px;
             font-weight: bold;
-            color: #00a8e8;
-            letter-spacing: 2px;
-            margin-bottom: 15px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-
-        .payment-number:hover {
-            background: #e6f7ff;
+            color: #fbbf24;
+            letter-spacing: 3px;
+            margin: 15px 0;
+            text-shadow: 0 0 10px rgba(251, 191, 36, 0.3);
         }
 
         .qris-container {
             background: #fff;
             border-radius: 12px;
             padding: 20px;
-            margin-bottom: 15px;
+            margin: 15px 0;
+            border: 2px solid #fbbf24;
         }
 
         .qris-code {
@@ -132,71 +149,58 @@
             background: #fff;
             padding: 10px;
             border-radius: 8px;
-            border: 1px solid #ddd;
-        }
-
-        .copy-btn {
-            background: #00a8e8;
-            color: white;
-            border: none;
-            padding: 10px 20px;
-            border-radius: 8px;
-            cursor: pointer;
-            font-size: 14px;
-            transition: all 0.3s ease;
-            margin-top: 10px;
-        }
-
-        .copy-btn:hover {
-            background: #0086c9;
-            transform: scale(1.05);
-        }
-
-        .copy-btn.copied {
-            background: #28a745;
         }
 
         .item-summary {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            padding: 15px;
+            background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 50%, #d97706 100%);
+            color: #064e3b;
+            padding: 20px;
             border-radius: 12px;
             margin-bottom: 20px;
             text-align: center;
+            border: 2px solid #fbbf24;
+            box-shadow: 0 4px 15px rgba(251, 191, 36, 0.3);
         }
 
         .item-summary h3 {
-            margin: 0 0 5px 0;
+            margin: 0 0 8px 0;
             font-size: 20px;
+            color: #064e3b;
+            font-weight: 700;
         }
 
         .item-summary .price {
-            font-size: 28px;
-            font-weight: bold;
+            font-size: 32px;
+            font-weight: 800;
             margin: 0;
+            color: #064e3b;
+            text-shadow: 0 1px 2px rgba(255, 255, 255, 0.3);
         }
 
         .btn-confirm-payment {
             width: 100%;
-            padding: 15px;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
+            padding: 16px;
+            background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 50%, #d97706 100%);
+            color: #064e3b;
             border: none;
             border-radius: 12px;
             font-size: 16px;
-            font-weight: bold;
+            font-weight: 800;
             cursor: pointer;
             transition: all 0.3s ease;
             margin-top: 20px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
         }
 
         .btn-confirm-payment:hover {
             transform: translateY(-2px);
-            box-shadow: 0 8px 20px rgba(102, 126, 234, 0.4);
+            box-shadow: 0 8px 25px rgba(251, 191, 36, 0.5);
         }
 
         .btn-confirm-payment:disabled {
-            background: #ccc;
+            background: #374151;
+            color: #9ca3af;
             cursor: not-allowed;
             transform: none;
             box-shadow: none;
@@ -204,9 +208,9 @@
 
         .payment-instruction {
             font-size: 12px;
-            color: #666;
-            margin-top: 10px;
-            line-height: 1.5;
+            color: #6ee7b7;
+            margin-top: 15px;
+            line-height: 1.6;
         }
 
         .toast {
@@ -214,18 +218,55 @@
             bottom: 30px;
             left: 50%;
             transform: translateX(-50%);
-            background: #28a745;
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
             color: white;
-            padding: 12px 24px;
-            border-radius: 8px;
+            padding: 14px 28px;
+            border-radius: 10px;
             font-size: 14px;
+            font-weight: 600;
             z-index: 9999;
             opacity: 0;
             transition: opacity 0.3s ease;
+            border: 2px solid #fbbf24;
+            box-shadow: 0 4px 20px rgba(16, 185, 129, 0.4);
         }
 
         .toast.show {
             opacity: 1;
+        }
+
+        /* Payment option specific colors */
+        .payment-option[data-method="dana"]:hover {
+            border-color: #008ceb;
+            box-shadow: 0 8px 25px rgba(0, 140, 235, 0.4);
+        }
+
+        .payment-option[data-method="ovo"]:hover {
+            border-color: #4c3494;
+            box-shadow: 0 8px 25px rgba(76, 52, 148, 0.4);
+        }
+
+        .payment-option[data-method="gopay"]:hover {
+            border-color: #00aed6;
+            box-shadow: 0 8px 25px rgba(0, 174, 214, 0.4);
+        }
+
+        .payment-option[data-method="qris"]:hover {
+            border-color: #c41e3a;
+            box-shadow: 0 8px 25px rgba(196, 30, 58, 0.4);
+        }
+
+        /* Modal close button */
+        .payment-modal .close {
+            color: #fbbf24;
+            font-size: 32px;
+            font-weight: bold;
+            transition: all 0.3s ease;
+        }
+
+        .payment-modal .close:hover {
+            color: #fff;
+            transform: scale(1.1);
         }
     </style>
 <base target="_blank">
@@ -341,28 +382,25 @@
             <!-- DANA Payment Details -->
             <div class="payment-details" id="danaDetails">
                 <h4>📱 Pembayaran via DANA</h4>
-                <p>Silakan transfer ke nomor DANA berikut:</p>
-                <div class="payment-number" onclick="copyToClipboard('085880212494')">0858 8021 2494</div>
-                <button class="copy-btn" onclick="copyToClipboard('085880212494')">📋 Salin Nomor</button>
-                <p class="payment-instruction">Transfer sesuai nominal dan simpan bukti pembayaran</p>
+                <p>Klik tombol di bawah untuk membuka aplikasi DANA</p>
+                <div class="payment-number-display">0858 8021 2494</div>
+                <p class="payment-instruction">Aplikasi DANA akan terbuka otomatis. Transfer sesuai nominal dan simpan bukti pembayaran.</p>
             </div>
 
             <!-- OVO Payment Details -->
             <div class="payment-details" id="ovoDetails">
                 <h4>📱 Pembayaran via OVO</h4>
-                <p>Silakan transfer ke nomor OVO berikut:</p>
-                <div class="payment-number" onclick="copyToClipboard('085880212494')">0858 8021 2494</div>
-                <button class="copy-btn" onclick="copyToClipboard('085880212494')">📋 Salin Nomor</button>
-                <p class="payment-instruction">Transfer sesuai nominal dan simpan bukti pembayaran</p>
+                <p>Klik tombol di bawah untuk membuka aplikasi OVO</p>
+                <div class="payment-number-display">0858 8021 2494</div>
+                <p class="payment-instruction">Aplikasi OVO akan terbuka otomatis. Transfer sesuai nominal dan simpan bukti pembayaran.</p>
             </div>
 
             <!-- GoPay Payment Details -->
             <div class="payment-details" id="gopayDetails">
                 <h4>📱 Pembayaran via GoPay</h4>
-                <p>Silakan transfer ke nomor GoPay berikut:</p>
-                <div class="payment-number" onclick="copyToClipboard('085880212494')">0858 8021 2494</div>
-                <button class="copy-btn" onclick="copyToClipboard('085880212494')">📋 Salin Nomor</button>
-                <p class="payment-instruction">Transfer sesuai nominal dan simpan bukti pembayaran</p>
+                <p>Klik tombol di bawah untuk membuka aplikasi GoPay</p>
+                <div class="payment-number-display">0858 8021 2494</div>
+                <p class="payment-instruction">Aplikasi GoPay akan terbuka otomatis. Transfer sesuai nominal dan simpan bukti pembayaran.</p>
             </div>
 
             <!-- QRIS Payment Details -->
@@ -376,7 +414,7 @@
             </div>
 
             <button class="btn-confirm-payment" id="confirmPaymentBtn" onclick="confirmPayment()" disabled>
-                ✅ Konfirmasi & Hubungi Admin
+                ✅ Pilih Metode Pembayaran
             </button>
         </div>
     </div>
