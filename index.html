@@ -3,40 +3,28 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Home - Chaos of Evoourth's</title>
+    <title>Chaos of Evoourth's - Minecraft Roleplay Server</title>
     <link rel="stylesheet" href="style.css">
-    <style>
-        .logo-img {
-            height: 35px;
-            width: auto;
-            object-fit: contain;
-        }
-
-        .logo-text {
-            font-size: 18px;
-            font-weight: bold;
-            color: var(--accent-silver);
-            text-shadow: 0 0 10px rgba(192, 192, 192, 0.5);
-            margin-left: 10px;
-        }
-
-        .logo-container {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-    </style>
 </head>
 <body>
     <!-- Header & Navigation -->
     <header>
         <nav class="navbar">
             <div class="logo-container">
-                <img src="server.png" alt="Server Logo" class="logo-img">
+                <img src="server.png" alt="Chaos Logo" class="logo-img">
                 <span class="logo-text">Chaos of Evoourth's</span>
             </div>
-            <ul class="nav-menu">
-                <li><a href="index.html">Home</a></li>
+
+            <!-- Hamburger Menu -->
+            <div class="hamburger" id="hamburger">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+
+            <!-- Navigation Menu -->
+            <ul class="nav-menu" id="navMenu">
+                <li><a href="#home">Home</a></li>
                 <li><a href="penjelasan.html">Penjelasan</a></li>
                 <li><a href="p2w.html">P2W</a></li>
                 <li><a href="team.html">Tim</a></li>
@@ -53,12 +41,12 @@
     <!-- Profile Modal -->
     <div class="modal" id="profileModal">
         <div class="modal-content profile-modal">
-            <span class="close" id="closeProfileModal">&times;</span>
+            <button class="close" id="closeProfileModal">&times;</button>
             <div class="profile-header">
                 <div class="profile-avatar-container">
                     <img src="" alt="User Avatar" class="profile-avatar" id="profileAvatar">
                     <label class="avatar-upload-label">
-                        <input type="file" id="avatarInput" accept="image/*" style="display: none;">
+                        <input type="file" id="avatarInput" accept="image/*">
                         📷
                     </label>
                 </div>
@@ -86,16 +74,16 @@
     <!-- Edit Profile Modal -->
     <div class="modal" id="editProfileModal">
         <div class="modal-content edit-modal">
-            <span class="close" id="closeEditModal">&times;</span>
+            <button class="close" id="closeEditModal">&times;</button>
             <h2>Edit Profil</h2>
             <form id="editProfileForm" onsubmit="saveProfile(event)">
                 <div class="form-group">
-                    <label>Username</label>
-                    <input type="text" id="editUsername" placeholder="Username" required>
+                    <label for="editUsername">Username</label>
+                    <input type="text" id="editUsername" placeholder="Masukkan username" required>
                 </div>
                 <div class="form-group">
-                    <label>Email</label>
-                    <input type="email" id="editEmail" placeholder="Email" required>
+                    <label for="editEmail">Email</label>
+                    <input type="email" id="editEmail" placeholder="Masukkan email" required>
                 </div>
                 <div class="form-actions">
                     <button type="submit" class="btn btn-primary">Simpan Perubahan</button>
@@ -110,7 +98,7 @@
         <div class="hero-content">
             <h1>⚔️ Selamat Datang di Chaos of Evoourth's</h1>
             <p>Server Minecraft Roleplay Brutal Legends dengan Gameplay yang Epik dan Penuh Tantangan</p>
-            <a href="https://chat.whatsapp.com/GBMqgFLIRnXCBYgzULREWb" class="btn btn-primary">Mulai Petualangan</a>
+            <a href="https://chat.whatsapp.com/GBMqgFLIRnXCBYgzULREWb" class="btn btn-primary" target="_blank">Mulai Petualangan</a>
         </div>
     </section>
 
@@ -123,19 +111,19 @@
                     <div class="feature-icon">👑</div>
                     <h3>Ranks Premium</h3>
                     <p>Dapatkan akses eksklusif dengan berbagai privilege istimewa dan perks khusus</p>
-                    <a href="p2w.html" class="button">Lihat Paket</a>
+                    <a href="p2w.html" class="btn btn-small">Lihat Paket</a>
                 </div>
                 <div class="feature-card">
                     <div class="feature-icon">⚡</div>
                     <h3>Kits Spesial</h3>
                     <p>Kumpulkan kit-kit spesial dengan item berharga untuk mempercepat progression</p>
-                    <a href="p2w.html" class="buttonl">Lihat Kits</a>
+                    <a href="p2w.html" class="btn btn-small">Lihat Kits</a>
                 </div>
                 <div class="feature-card">
                     <div class="feature-icon">🎭</div>
                     <h3>Roleplay Brutal</h3>
                     <p>Alami pengalaman roleplay yang epik dengan cerita dan lore yang dalam</p>
-                    <a href="penjelasan.html" class="button">Lihat Lore</a>
+                    <a href="penjelasan.html" class="btn btn-small">Lihat Lore</a>
                 </div>
             </div>
         </div>
@@ -156,117 +144,5 @@
     </footer>
 
     <script src="script.js"></script>
-    <script>
-        // Load Profile Data
-        function loadProfile() {
-            const currentUser = JSON.parse(localStorage.getItem('currentUser'));
-            if (!currentUser) {
-                window.location.href = 'login.html';
-                return;
-            }
-
-            document.getElementById('profileUsername').textContent = currentUser.username;
-            document.getElementById('profileEmail').textContent = currentUser.email;
-            document.getElementById('profileAvatar').src = currentUser.avatar;
-            
-            const joinDate = new Date(currentUser.createdAt);
-            const options = { year: 'numeric', month: 'long', day: 'numeric' };
-            document.getElementById('profileJoinDate').textContent = joinDate.toLocaleDateString('id-ID', options);
-
-            document.getElementById('editUsername').value = currentUser.username;
-            document.getElementById('editEmail').value = currentUser.email;
-        }
-
-        // Profile Modal
-        document.getElementById('profileBtn').addEventListener('click', () => {
-            document.getElementById('profileModal').style.display = 'flex';
-        });
-
-        document.getElementById('closeProfileModal').addEventListener('click', () => {
-            document.getElementById('profileModal').style.display = 'none';
-        });
-
-        document.getElementById('editProfileBtn').addEventListener('click', () => {
-            document.getElementById('profileModal').style.display = 'none';
-            document.getElementById('editProfileModal').style.display = 'flex';
-        });
-
-        document.getElementById('closeEditModal').addEventListener('click', () => {
-            document.getElementById('editProfileModal').style.display = 'none';
-        });
-
-        document.getElementById('cancelEditBtn').addEventListener('click', () => {
-            document.getElementById('editProfileModal').style.display = 'none';
-        });
-
-        // Avatar Upload
-        document.getElementById('avatarInput').addEventListener('change', (e) => {
-            const file = e.target.files[0];
-            const reader = new FileReader();
-
-            reader.onload = (event) => {
-                const currentUser = JSON.parse(localStorage.getItem('currentUser'));
-                currentUser.avatar = event.target.result;
-                
-                const users = JSON.parse(localStorage.getItem('users'));
-                const userIndex = users.findIndex(u => u.id === currentUser.id);
-                users[userIndex] = currentUser;
-
-                localStorage.setItem('users', JSON.stringify(users));
-                localStorage.setItem('currentUser', JSON.stringify(currentUser));
-
-                document.getElementById('profileAvatar').src = currentUser.avatar;
-            };
-
-            reader.readAsDataURL(file);
-        });
-
-        // Save Profile
-        function saveProfile(e) {
-            e.preventDefault();
-            
-            const currentUser = JSON.parse(localStorage.getItem('currentUser'));
-            const newUsername = document.getElementById('editUsername').value;
-            const newEmail = document.getElementById('editEmail').value;
-
-            const users = JSON.parse(localStorage.getItem('users'));
-            const userIndex = users.findIndex(u => u.id === currentUser.id);
-
-            currentUser.username = newUsername;
-            currentUser.email = newEmail;
-
-            users[userIndex] = currentUser;
-            localStorage.setItem('users', JSON.stringify(users));
-            localStorage.setItem('currentUser', JSON.stringify(currentUser));
-
-            loadProfile();
-            document.getElementById('editProfileModal').style.display = 'none';
-            alert('Profil berhasil diperbarui!');
-        }
-
-        // Logout
-        document.getElementById('logoutBtn').addEventListener('click', () => {
-            if (confirm('Yakin ingin logout?')) {
-                localStorage.removeItem('currentUser');
-                window.location.href = 'login.html';
-            }
-        });
-
-        // Close modal when clicking outside
-        window.addEventListener('click', (e) => {
-            const profileModal = document.getElementById('profileModal');
-            const editModal = document.getElementById('editProfileModal');
-            
-            if (e.target === profileModal) {
-                profileModal.style.display = 'none';
-            }
-            if (e.target === editModal) {
-                editModal.style.display = 'none';
-            }
-        });
-
-        // Load on page load
-        loadProfile();
-    </script>
 </body>
 </html>
